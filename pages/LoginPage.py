@@ -1,30 +1,28 @@
 from selenium.webdriver.common.by import By
+from pages.BasePage import BasePage  # <--- Import the Parent
 
-class LoginPage:
+class LoginPage(BasePage):  # <--- Inherit from BasePage
     """
     Page Object for the Login Page.
-    Contains all Locators and Actions for this specific page.
     """
 
-    # 1. LOCATORS (The "Map")
-    # We store them here as class variables so they are easy to change.
+    # LOCATORS
     USERNAME_FIELD = (By.ID, "user-name")
     PASSWORD_FIELD = (By.ID, "password")
     LOGIN_BUTTON   = (By.NAME, "login-button")
 
-    # 2. INITIALIZER
+    # INITIALIZER
     def __init__(self, driver):
-        self.driver = driver
+        # Initialize the Parent (BasePage) so we get the 'self.wait' tools
+        super().__init__(driver)
 
-    # 3. ACTIONS (The "Logic")
+    # ACTIONS (Simpler now!)
     def enter_username(self, username):
-        """Finds the username box and types the name."""
-        self.driver.find_element(*self.USERNAME_FIELD).send_keys(username)
+        # We use the smart 'do_send_keys' from BasePage
+        self.do_send_keys(self.USERNAME_FIELD, username)
 
     def enter_password(self, password):
-        """Finds the password box and types the password."""
-        self.driver.find_element(*self.PASSWORD_FIELD).send_keys(password)
+        self.do_send_keys(self.PASSWORD_FIELD, password)
 
     def click_login(self):
-        """Clicks the login button."""
-        self.driver.find_element(*self.LOGIN_BUTTON).click()
+        self.do_click(self.LOGIN_BUTTON)
